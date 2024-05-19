@@ -11,6 +11,8 @@
 		1C6BB66E2BFA36EA00613000 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6BB66D2BFA36EA00613000 /* ContentView.swift */; };
 		1C6BB6702BFA36EB00613000 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1C6BB66F2BFA36EB00613000 /* Assets.xcassets */; };
 		1C6BB6732BFA36EB00613000 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1C6BB6722BFA36EB00613000 /* Preview Assets.xcassets */; };
+		1C6BB67A2BFA371500613000 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6BB6792BFA371500613000 /* OpenAIService.swift */; };
+		1C6BB67C2BFA374600613000 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6BB67B2BFA374600613000 /* API.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		1C6BB66D2BFA36EA00613000 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1C6BB66F2BFA36EB00613000 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1C6BB6722BFA36EB00613000 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		1C6BB6792BFA371500613000 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
+		1C6BB67B2BFA374600613000 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,9 +56,11 @@
 			isa = PBXGroup;
 			children = (
 				1C6BB66B2BFA36EA00613000 /* OpenAIDemoApp.swift */,
+				1C6BB6792BFA371500613000 /* OpenAIService.swift */,
 				1C6BB66D2BFA36EA00613000 /* ContentView.swift */,
 				1C6BB66F2BFA36EB00613000 /* Assets.xcassets */,
 				1C6BB6712BFA36EB00613000 /* Preview Content */,
+				1C6BB67B2BFA374600613000 /* API.swift */,
 			);
 			path = OpenAIDemo;
 			sourceTree = "<group>";
@@ -139,6 +145,8 @@
 			files = (
 				1C6BB66E2BFA36EA00613000 /* ContentView.swift in Sources */,
 				1C6BB66C2BFA36EA00613000 /* OpenAIDemoApp.swift in Sources */,
+				1C6BB67C2BFA374600613000 /* API.swift in Sources */,
+				1C6BB67A2BFA371500613000 /* OpenAIService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
