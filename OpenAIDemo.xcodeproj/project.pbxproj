@@ -58,9 +58,9 @@
 				1C6BB66B2BFA36EA00613000 /* OpenAIDemoApp.swift */,
 				1C6BB6792BFA371500613000 /* OpenAIService.swift */,
 				1C6BB66D2BFA36EA00613000 /* ContentView.swift */,
+				1C6BB67B2BFA374600613000 /* API.swift */,
 				1C6BB66F2BFA36EB00613000 /* Assets.xcassets */,
 				1C6BB6712BFA36EB00613000 /* Preview Content */,
-				1C6BB67B2BFA374600613000 /* API.swift */,
 			);
 			path = OpenAIDemo;
 			sourceTree = "<group>";

@@ -9,11 +9,29 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var userInput: String = ""
-    @State private var responseText: String = "Waiting for response..."
+    @State private var conversation: [Message] = [Message(role: "system", content: "Welcome To CHATGPT.")]
     private let openAIService = OpenAIService()
     
     var body: some View {
         VStack {
+            ScrollView {
+                ForEach(conversation, id: \.content) { message in
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading) {
+                            Text(message.role.capitalized + ":")
+                                .font(.headline)
+                                .foregroundColor(message.role == "user" ? .blue : .green)
+                            Text(message.content)
+                                .padding()
+                                .background(Color.gray .opacity(0.2))
+                                .cornerRadius(8)
+                             }
+                             Spacer() // This will push the content to the left
+                         }
+                 .padding(.vertical, 4)
+                }
+            }
+            
             TextField("Enter your prompt here", text: $userInput)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
@@ -30,22 +48,29 @@ struct ContentView: View {
             }
             .padding()
             
-            Text(responseText)
-                .padding()
             
-            Spacer()
         }
         .padding()
     }
     
     private func fetchResponse() {
-        openAIService.fetchResponse(prompt: userInput) { response in
-            DispatchQueue.main.async {
-                responseText = response ?? "Failed to fetch response"
-            }
-        }
-    }
-}
+           let userMessage = Message(role: "user", content: userInput)
+           conversation.append(userMessage)
+           
+           openAIService.fetchResponse(prompt: userInput) { response in
+               DispatchQueue.main.async {
+                   if let responseContent = response {
+                       let assistantMessage = Message(role: "assistant", content: responseContent)
+                       conversation.append(assistantMessage)
+                   } else {
+                       let errorMessage = Message(role: "assistant", content: "Failed to fetch response")
+                       conversation.append(errorMessage)
+                   }
+                   userInput = ""
+               }
+           }
+       }
+   }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

@@ -15,15 +15,49 @@ struct Message: Codable {
 struct OpenAIRequest: Codable {
     let model: String
     let messages: [Message]
+    let temperature: Double
 }
 
 struct OpenAIResponse: Codable {
-    let messages: [Message]
+    struct Choice: Codable {
+        struct Message: Codable {
+            let role: String
+            let content: String
+        }
+        
+        let message: Message
+        let finish_reason: String
+    }
+    
+    let id: String
+    let object: String
+    let created: Int
+    let model: String
+    let usage: Usage
+    let choices: [Choice]
+}
+
+struct Usage: Codable {
+    let prompt_tokens: Int
+    let completion_tokens: Int
+    let total_tokens: Int
+}
+
+struct OpenAIError: Codable {
+    let message: String
+    let type: String
+    let param: String?
+    let code: String?
+}
+
+struct OpenAIErrorResponse: Codable {
+    let error: OpenAIError
 }
 
 class OpenAIService {
-    private let apiKey = "YOUR_API_KEY"
-
+    private let apiKey = API.apiKey
+    private var conversationHistory: [Message] = [Message(role: "system", content: "You are a programmer's assistant")]
+    
     func fetchResponse(prompt: String, completion: @escaping (String?) -> Void) {
         guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
             print("Invalid URL")
@@ -35,13 +69,14 @@ class OpenAIService {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        
+        // Add the user's new message to the conversation history
+        conversationHistory.append(Message(role: "user", content: prompt))
 
         let requestBody = OpenAIRequest(
-            model: "gpt-4",
-            messages: [
-                Message(role: "system", content: "You are a programmer's assistant."),
-                Message(role: "user", content: prompt)
-            ]
+            model: "gpt-3.5-turbo",
+            messages: conversationHistory,
+            temperature: 0.7
         )
         
         do {
@@ -72,9 +107,25 @@ class OpenAIService {
             
             do {
                 let decoder = JSONDecoder()
+                
+                if let errorResponse = try? decoder.decode(OpenAIErrorResponse.self, from: data) {
+                    print("Error response: \(errorResponse.error.message)")
+                    completion("Error: \(errorResponse.error.message)")
+                    return
+                }
+                
                 let openAIResponse = try decoder.decode(OpenAIResponse.self, from: data)
-                let content = openAIResponse.messages.last?.content
-                completion(content)
+                if let assistantMessage = openAIResponse.choices.first?.message {
+                    // Convert the response message to the request message type
+                   let message = Message(role: assistantMessage.role, content: assistantMessage.content)
+                   // Add the assistant's response to the conversation history
+                   self.conversationHistory.append(message)
+                   completion(assistantMessage.content)
+                    
+                } else {
+                    completion(nil)
+                }
+                
             } catch {
                 print("Failed to decode response: \(error)")
                 completion(nil)
@@ -84,4 +135,3 @@ class OpenAIService {
         task.resume()
     }
 }
-
